@@ -1,0 +1,12 @@
+---
+
+urls:
+  protocol: https
+  host: image.baidu.com
+
+  #识别图片
+  query:
+    path: /pictureup/uploadshitu?fr=flash&fm=index&pos=upload
+    method: post
+
+...

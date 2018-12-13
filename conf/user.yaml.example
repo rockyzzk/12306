@@ -1,0 +1,52 @@
+---
+# 12306配置
+12306_conf:
+  # 12306登录账号
+  account:
+    username: ""
+    password: ""
+
+  # 出发城市，填写北京即可包含北京、北京西、北京南、...
+  from_station: "北京"
+
+  # 到达城市 填写北京即可包含北京、北京西、北京南、...
+  to_station: "衡水"
+
+  # 出发日期（可多选）
+  trip_dates:
+  - "2018-12-14"
+
+  # 期望车次（可多选）：
+  expect_trains:
+  - "Z107"
+
+  # 坐席类型（可多选）：
+  seat_types:
+  - "硬座"
+
+  # 乘车人姓名（可多选）：
+  passengers:
+  - "xxx"
+
+  # 列车类型: 高铁 G  动车 D  其它火车 O
+  train_types: [G,D,O]
+
+# 自动识别验证码
+is_auto_captcha: 0
+
+# 百度云帐号
+baiduai_conf:
+  app_id: ""
+  api_key: ""
+  secret_key: ""
+
+# 邮箱
+mail_conf:
+  host: "smtp.163.com"
+  username: ""
+  passcode: "" # 授权码，非密码
+  from_email: ""
+  to_email:
+  - ""
+
+...

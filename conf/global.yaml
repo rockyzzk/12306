@@ -1,0 +1,6 @@
+---
+captcha_path: img/captcha.jpg
+captcha_sub_path: img/captcha_sub
+captcha_word_path: img/captcha_word.jpg
+
+...

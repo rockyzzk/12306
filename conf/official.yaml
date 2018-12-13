@@ -1,0 +1,115 @@
+---
+appid: otn
+
+urls:
+  protocol: https
+  host: kyfw.12306.cn
+
+  #登陆
+  login:
+    path: /passport/web/login
+    method: post
+    referer: https://kyfw.12306.cn/otn/login/init
+
+  #认证
+  auth:
+    path: /passport/web/auth/uamtk
+    method: post
+    referer: https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin
+
+  #获取登陆验证码
+  get_captcha_login:
+    path: /passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand
+    method: get
+    referer: https://kyfw.12306.cn/otn/login/init
+
+  #验证码校验
+  captcha_check:
+    path: /passport/captcha/captcha-check
+    method: post
+    referer: https://kyfw.12306.cn/otn/login/init
+
+  #权限校验
+  uamauthclient:
+    path: /otn/uamauthclient
+    method: post
+    referer: https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin
+
+  #登陆状态校验
+  check_user:
+    path: /otn/login/checkUser
+    method: post
+    referer: https://kyfw.12306.cn/otn/leftTicket/init
+
+  #获取所有车站
+  station_names:
+    path: /otn/resources/js/framework/station_name.js?station_version=1.9077
+    method: get
+    referer: https://kyfw.12306.cn/otn/leftTicket/init
+
+  #查询车次及余票
+  query_trains:
+    path: /otn/leftTicket/query
+    method: get
+    referer: https://kyfw.12306.cn/otn/leftTicket/init
+
+  #获取乘车人
+  get_passengers:
+    path: /otn/confirmPassenger/getPassengerDTOs
+    method: get
+    referer: https://kyfw.12306.cn/otn/confirmPassenger/initDc
+
+  #提交订单
+  submit_order:
+    path: /otn/leftTicket/submitOrderRequest
+    method: post
+    referer: https://kyfw.12306.cn/otn/leftTicket/init
+
+  #初始化订单
+  init_order:
+    path: /otn/confirmPassenger/initDc
+    method: get
+    referer: https://kyfw.12306.cn/otn/leftTicket/init
+
+  #检查订单
+  check_order:
+    path: /otn/confirmPassenger/checkOrderInfo
+    method: post
+    referer: https://kyfw.12306.cn/otn/confirmPassenger/initDc
+
+  #获取排队人数
+  get_queue_count:
+    path: /otn/confirmPassenger/getQueueCount
+    method: post
+    referer: https://kyfw.12306.cn/otn/confirmPassenger/initDc
+
+  #确认订单
+  confirm_order:
+    path: /otn/confirmPassenger/confirmSingleForQueue
+    method: post
+    referer: https://kyfw.12306.cn/otn/confirmPassenger/initDc
+
+  #初始化未完成订单列表
+  init_order_no_complete:
+    path: /otn/queryOrder/initNoComplete
+    method: post
+    referer: https://kyfw.12306.cn/otn/queryOrder/initNoComplete
+
+  #获取未完成订单
+  get_order_no_complete:
+    path: /otn/queryOrder/queryMyOrderNoComplete
+    method: post
+    referer: https://kyfw.12306.cn/otn/queryOrder/initNoComplete
+
+  #取消未完成订单
+  cancel_order_no_complete:
+    path: /otn/queryOrder/cancelNoCompleteMyOrder
+    method: post
+    referer: https://kyfw.12306.cn/otn/queryOrder/initNoComplete
+
+  #查询订单等待时间
+  get_order_wait_time:
+    path: /otn/confirmPassenger/queryOrderWaitTime
+    method: get
+    referer: https://kyfw.12306.cn/otn/confirmPassenger/initDc
+...
