@@ -15,15 +15,15 @@ class Conf
     protected static $defaultFile = 'global';
 
     /**
-     * @param null $key    key为空，返回全部
+     * @param null $key    key为null，返回全部
      * @param null $fileName
      * @return null
      */
     public static function getConf($key = null, $fileName = null) {
         $values = self::_getYaml($fileName);
         $data = self::_getData($values, $key);
-        if (empty($data)) {
-            Log::error($fileName . '.yaml 配置文件不存在 或 内容为空');
+        if (is_null($data)) {
+            Log::error("配置文件 $fileName.yaml 中的 $key 未设置");
         }
         return $data;
     }
@@ -45,7 +45,7 @@ class Conf
 
     protected static function _getData($values, $keyDir) {
 
-        if (empty($keyDir)) {
+        if (is_null($keyDir)) {
             return $values;
         }
 

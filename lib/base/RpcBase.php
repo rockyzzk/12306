@@ -31,7 +31,7 @@ class RpcBase {
 
     protected $logExceptResponseKeywords = [];
 
-    protected function _get($uri, $params, $headers = null, $multiCount = 1) {
+    protected function _get($uri, $params, $headers = null, $multiCount = 0) {
 
         // 请求头
         if (!is_null($headers)) {
@@ -43,7 +43,7 @@ class RpcBase {
             $params = '?' . http_build_query($params);
         }
 
-        if ($multiCount > 1) {
+        if ($multiCount > 0) {
             // 发送多个请求
             $res = $this->_requestMulti('GET', $this->host . $uri . $params, $options ?? [], $multiCount);
         } else {
@@ -53,7 +53,7 @@ class RpcBase {
         return $res;
     }
 
-    protected function _post($uri, $params, $headers = null, $multiCount = 1) {
+    protected function _post($uri, $params, $headers = null, $multiCount = 0) {
 
         // 文件
         if (isset($params['multipart'])) {
@@ -71,12 +71,12 @@ class RpcBase {
             $options['headers'] = $headers;
         }
 
-        // 参数
+        // 请求体
         if (!empty($params)) {
             $options['form_params'] = $params;
         }
 
-        if ($multiCount > 1) {
+        if ($multiCount > 0) {
             // 发送多个请求
             $res = $this->_requestMulti('POST', $this->host . $uri, $options ?? [], $multiCount);
         } else {
