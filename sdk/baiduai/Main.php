@@ -1,6 +1,6 @@
 <?php
 /**
- * Desc: 百度AI对外接口
+ * Desc: 百度AI实现接口
  * User: zhangzekang
  * Date: 2018/12/10
  * Time: 上午11:45
@@ -69,8 +69,7 @@ class Main {
         }
 
         // 调用通用文字识别, 图片参数为本地图片
-        $res = $this->imgRecoObj->multiAdvancedGeneral($images);
-        var_dump($res);die;
+        return $this->imgRecoObj->multiAdvancedGeneral($images);
     }
 }
 
