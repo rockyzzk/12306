@@ -18,8 +18,8 @@ class RpcBase {
 
     private $httpClient = null;
 
-    private function _getHttp() {
-        if (is_null($this->httpClient)) {
+    private function _getHttp($forceUpdate = false) {
+        if (is_null($this->httpClient) || $forceUpdate) {
             $this->httpClient = new Client(['cookies' => true]);
         }
         return $this->httpClient;
@@ -148,6 +148,11 @@ class RpcBase {
         $promise->wait();
 
         return $resArr;
+    }
+
+    public function cleanCookies()
+    {
+        $this->_getHttp(true);
     }
 
 }
