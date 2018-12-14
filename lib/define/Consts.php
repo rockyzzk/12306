@@ -87,7 +87,7 @@ class Consts
     const QUERY_TICKET_MULTI_COUNT = 10;
 
     // 查询余票提醒间隔
-    const QUERY_TICKET_NOTICE_COUNT = 100;
+    const QUERY_TICKET_NOTICE_COUNT = 10000;
 
     // 可预定时间
     const AVAILABLE_START_TIME = '07:00';

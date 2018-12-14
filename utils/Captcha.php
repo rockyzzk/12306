@@ -91,25 +91,22 @@ class Captcha
     public function recognize() {
 
         if ($this->isAutoCaptcha) {
-            $input = $this->auto();
+            $captchaKeyArr = $this->auto();
         } else {
-            $input = $this->manual();
+            $captchaKeyArr = $this->manual();
         }
 
-        $captcha = $this->transferPosition($input);
+        $captcha = $this->transferPosition($captchaKeyArr);
 
         return $captcha;
     }
 
-    protected function transferPosition ($numStr) {
-        if (empty($numStr)) {
+    protected function transferPosition ($numArr) {
+        if (empty($numArr) || count($numArr) === 0) {
             return '';
         }
 
-        $numStr = str_replace('，', ',', $numStr);
-        $numStr = str_replace(' ', '', $numStr);
-        $numArr = array_unique(explode(',', $numStr));
-
+        $numArr = array_unique($numArr);
         $positions = [];
 
         foreach ($numArr as $num) {
@@ -140,41 +137,44 @@ class Captcha
         );
         exec('open ' . $this->captchaPath);
         $handle = fopen("php://stdin", "r");
+
         $input = trim(fgets($handle));
-        return $input;
+        $input = str_replace('，', ',', $input);
+        $input = str_replace(' ', '', $input);
+
+        return explode(',', $input);
     }
 
     protected function auto() {
 
-        $imgKeyArr = [];
+        $captchaKeyArr = [];
         $this->getWord();
         $this->getSubImgs();
 
         // 识别汉字
         $keywordByWord = $this->recognizeWord($this->captchaWordPath);
-        $keywordByWordArr = preg_split("//u", $keywordByWord, -1, PREG_SPLIT_NO_EMPTY);
         if (empty($keywordByWord)) {
-            return '';
+            return [];
         }
 
         // 遍历识别每张子图
-        $keywordByImg = $this->recognizeAllSubImg();
+        for ($imgKey = 1; $imgKey <= 8; $imgKey++) {
+            $keywordByImg = $this->recognizeSubImg($this->captchaSubPath . $imgKey . '.jpg');
 
-        // 遍历每个汉字
-        foreach ($keywordByWordArr as $keywordByWordItem) {
-            // 遍历每张图
-            foreach ($keywordByImg as $imgKey => $keywordByImgItem) {
-                if (mb_strpos($keywordByImgItem, $keywordByWordItem) !== false) {
-                    if (!in_array($imgKey, $imgKeyArr)) {
-                        $imgKeyArr[] = $imgKey;
+            if ($this->isImgMatchKeyword($keywordByImg, $keywordByWord)) {
+                if (!in_array($imgKey, $captchaKeyArr)) {
+                    $captchaKeyArr[] = $imgKey;
+
+                    // 单关键字验证码，匹配的图片数量为1～2个
+                    if (count($captchaKeyArr) === 2) {
+                        break;
                     }
                 }
             }
         }
 
-        $captcha = implode(',', $imgKeyArr);
-        Log::info('自动识别验证码:'.$captcha);
-        return $captcha;
+        Log::info('自动识别验证码:' . implode(',', $captchaKeyArr));
+        return $captchaKeyArr;
     }
 
     protected function recognizeWord($imgPath) {
@@ -193,6 +193,24 @@ class Captcha
         }
 
         return $keyword ?? '';
+    }
+
+    protected function recognizeSubImg($imgPath) {
+
+        if ($this->isAi) {
+            // 百度AI (500次/天免费)
+            $keywordArr = $this->baiduAiObj->recognizeImg($imgPath);
+            if (!empty($keywordArr['result'])) {
+                $keywordByImg = implode('|', array_column($keywordArr['result'], 'keyword'));
+            }
+        }
+
+        if (empty($keywordByImg)) {
+            // 百度识图
+            $keywordByImg = $this->baiduImgObj->query($imgPath);
+        }
+
+        return $keywordByImg ?? '';
     }
 
     protected function recognizeAllSubImg() {
@@ -219,6 +237,22 @@ class Captcha
         }
 
         return $keywordByImgArr ?? [];
+    }
+
+    protected function isImgMatchKeyword($keywordByImg, $keywordByWord) {
+
+        // 拆分每个字符
+        $keywordByWordArr = preg_split("//u", $keywordByWord, -1, PREG_SPLIT_NO_EMPTY);
+
+        // 遍历每个汉字
+        foreach ($keywordByWordArr as $keywordByWordItem) {
+
+            if (mb_strpos($keywordByImg, $keywordByWordItem) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function getWord() {
