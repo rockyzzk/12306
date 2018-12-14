@@ -64,7 +64,7 @@ class Official extends RpcBase {
         return $res;
     }
 
-    protected function __send($urlKey, $params = null, $header = null, $multiCount = 1) {
+    protected function __send($urlKey, $params = null, $header = null, $multiCount = 0) {
 
         $headers = array_merge($this->defaultHeaders, [
             'Referer' => $this->urls[$urlKey]['referer'],
@@ -438,7 +438,7 @@ class Official extends RpcBase {
             return true;
 
         } elseif (empty($res['status']) || $res['status'] != true) {
-            Log::warning($res['messages']);
+            Log::warning(is_array($res['messages']) ? $res['messages'][0] : $res['messages']);
         } elseif (empty($res['data']['submitStatus']) || $res['data']['submitStatus'] != true) {
             Log::warning($res['data']['errMsg']);
         }

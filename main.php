@@ -135,7 +135,7 @@ class Main
 
         do {
             // 获取验证码之前清空cookie，因为第一次没通过校验，后面验证码会变难
-            $this->officialObj = new Official();
+            $this->officialObj->cleanCookies();
 
             // 获取验证码
             $getRes = $this->officialObj->getCaptcha('login');
@@ -206,7 +206,7 @@ class Main
 
             // 查询出错，关小黑屋，防止错过正常票
             if ($queueCount === false) {
-                $trainNo = $orderInfo['ticket_info']['queryLeftTicketRequestDTO']['stationTrainCode'];
+                $trainNo = $orderInfo['ticket_info']['queryLeftTicketRequestDTO']['station_train_code'];
                 Log::warning($trainNo . ' 车次关小黑屋，时间：' . (Consts::CACHE_BLACK_HOUSE['ttl'] / 60) . '分钟');
                 Cache::set(Consts::CACHE_BLACK_HOUSE['key'] . $trainNo, 1, Consts::CACHE_BLACK_HOUSE['ttl']);
             }
