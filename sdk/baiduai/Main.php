@@ -6,13 +6,15 @@
  * Time: 上午11:45
  */
 
+namespace sdk\baiduai;
+
 require_once 'AipOcr.php';
 require_once 'AipImageSearch.php';
 require_once 'AipImageClassify.php';
 
 use \Core\Conf;
 
-class Open {
+class Main {
 
     private $app_id;
 
@@ -33,9 +35,9 @@ class Open {
         $this->api_key = $conf['api_key'];
         $this->secret_key = $conf['secret_key'];
 
-        $this->ocrObj = new AipOcr($this->app_id, $this->api_key, $this->secret_key);
-        $this->imgSearchObj = new AipImageSearch($this->app_id, $this->api_key, $this->secret_key);
-        $this->imgRecoObj = new AipImageClassify($this->app_id, $this->api_key, $this->secret_key);
+        $this->ocrObj = new \AipOcr($this->app_id, $this->api_key, $this->secret_key);
+        $this->imgSearchObj = new \AipImageSearch($this->app_id, $this->api_key, $this->secret_key);
+        $this->imgRecoObj = new \AipImageClassify($this->app_id, $this->api_key, $this->secret_key);
     }
 
     public function recognizeWord($imgPath) {
@@ -72,4 +74,4 @@ class Open {
     }
 }
 
-return new Open();
+return new Main();

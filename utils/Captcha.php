@@ -10,8 +10,9 @@ namespace Utils;
 
 use \Core\Conf;
 use \Core\Log;
-use Define\Consts;
+use \Define\Consts;
 use \Rpc\BaiduImg;
+use \Sdk\baiduai\Main as BaiduAi;
 use \Intervention\Image\ImageManager;
 use \thiagoalessio\TesseractOCR\TesseractOCR;
 
@@ -45,7 +46,7 @@ class Captcha
         $this->managerObj = new ImageManager(array('driver' => 'imagick'));
         $this->baiduImgObj = new BaiduImg();
         if ($this->isAi) {
-            $this->baiduAiObj = require_once LIB_PATH . '/baiduai/Open.php';
+            $this->baiduAiObj = new BaiduAi();
         }
     }
 

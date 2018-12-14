@@ -31,6 +31,7 @@ class Init
         define('LIB_PATH', ROOT_PATH.'/lib');
         define('LOG_PATH', ROOT_PATH.'/log');
         define('UTILS_PATH', ROOT_PATH.'/utils');
+        define('SDK_PATH', ROOT_PATH.'/sdk');
     }
 
     private static function _autoLoad()

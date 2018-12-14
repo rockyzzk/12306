@@ -14,6 +14,7 @@ class Loader
         'Core' => LIB_PATH . DIRECTORY_SEPARATOR . 'core',
         'Define' => LIB_PATH . DIRECTORY_SEPARATOR . 'define',
         'Utils' => UTILS_PATH,
+        'Sdk' => SDK_PATH,
     );
 
     public static function autoload($class)
