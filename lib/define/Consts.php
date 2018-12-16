@@ -88,9 +88,6 @@ class Consts
     // RPC请求失败等待时间
     const RPC_FAILED_SECOND = 60;
 
-    // 查询余票提醒间隔
-    const QUERY_TICKET_NOTICE_COUNT = 1000;
-
     // 可预定时间
     const AVAILABLE_START_TIME = '07:00';
     const AVAILABLE_END_TIME = '23:00';

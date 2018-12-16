@@ -56,22 +56,21 @@ class Main
 
     public function start() {
 
-        Cache::set(Consts::CACHE_QUERY_TIMES['key'], 0, Consts::CACHE_QUERY_TIMES['ttl']);
+        $cycleTime = 0;
         $startMsg = sprintf(
-            "开始抢由【%s】到【%s】的票，日期【%s】，乘车人【%s】，车次【%s】，坐席【%s】，每查询【%s】次提醒",
+            "开始抢由【%s】到【%s】的票，日期【%s】，乘车人【%s】，车次【%s】，坐席【%s】",
             $this->userConf['from_station'],
             $this->userConf['to_station'],
             implode('、', $this->userConf['trip_dates']),
             implode('、', $this->userConf['passengers']),
             empty($this->userConf['expect_trains'][0]) ? '全部' : implode('、', $this->userConf['expect_trains']),
-            empty($this->userConf['seat_types'][0]) ? '全部' : implode('、', $this->userConf['seat_types']),
-            Consts::QUERY_TICKET_NOTICE_COUNT
+            empty($this->userConf['seat_types'][0]) ? '全部' : implode('、', $this->userConf['seat_types'])
         );
 
         do {
             // 校验是否在可订时间段
             if (!$this->isAvailableTime()) {
-                if (Cache::get(Consts::CACHE_QUERY_TIMES['key']) === 0) {
+                if ($cycleTime === 0) {
                     Log::info('车票可售时间段为 7:00-23:00，系统将 7:00开始运行');
                 }
                 sleep(60);
@@ -82,7 +81,7 @@ class Main
             $this->proLogin();
 
             // 首次输出抢票信息
-            if (Cache::get(Consts::CACHE_QUERY_TIMES['key']) === 0) {
+            if ($cycleTime === 0) {
                 Log::info($startMsg);
             }
 
@@ -94,14 +93,14 @@ class Main
 
                 // 更新查询次数
                 $queryTicketMultiCount = Cache::get(Consts::CACHE_QUERY_TICKET_MULTI_COUNT['key']) ?? Strategy::QUERY_TICKET_MULTI_MAX;
-                $queryTimes = Cache::get(Consts::CACHE_QUERY_TIMES['key']) + $queryTicketMultiCount;
+                $queryTimes = Cache::get(Consts::CACHE_QUERY_TIMES['key']) ?? 0 + $queryTicketMultiCount;
                 Cache::set(Consts::CACHE_QUERY_TIMES['key'], $queryTimes, Consts::CACHE_QUERY_TIMES['ttl']);
 
                 // 未查到合适的车次及余票
                 if (empty($trainsInfo)) {
 
-                    // 每查询x次提醒
-                    if ($queryTimes % Consts::QUERY_TICKET_NOTICE_COUNT === 0) {
+                    // 每循环100次提醒
+                    if ($cycleTime % 100 === 0) {
                         Log::info("未找到合适车次，已进行【 $queryTimes 】次查询");
                     }
 
@@ -122,6 +121,7 @@ class Main
             }
 
             sleep(Consts::QUERY_TICKET_SLEEP_SECOND);
+            $cycleTime ++;
         } while (true);
 
     }
