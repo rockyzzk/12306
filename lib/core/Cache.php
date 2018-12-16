@@ -35,6 +35,12 @@ class Cache extends ArrayCache
 
     public static function get($key) {
         $cache = self::getCacheObj();
-        return $cache->doFetch($key);
+        $val = $cache->doFetch($key);
+
+        // 不存在，返回null
+        if ($val === false) {
+            return null;
+        }
+        return $val;
     }
 }
