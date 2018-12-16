@@ -13,7 +13,6 @@ use \Core\Conf;
 use \Core\Cache;
 use \Core\Log;
 use \Define\Consts;
-use GuzzleHttp\Pool;
 use \Utils\Mail;
 
 class Official extends RpcBase {
@@ -32,7 +31,8 @@ class Official extends RpcBase {
 
     protected $logExceptResponseKeywords = [
         'captcha-image',
-        'pictureup'
+        'pictureup',
+        'query'
     ];
 
     function __construct()
@@ -273,7 +273,6 @@ class Official extends RpcBase {
 
         if (!isset($res)) {
             Log::warning('未获取到车次列表，请手动检查IP是否被封');
-            sleep(Consts::QUERY_TICKET_FAILED_SECOND);
             return null;
         } elseif ($res['status'] !== true) {
             Log::warning('获取车次列表失败');
@@ -403,7 +402,6 @@ class Official extends RpcBase {
 
         }
 
-        // 查询出错，加入小黑屋，此票作废
         Log::warning(is_array($res['messages']) ? $res['messages'][0] : $res['messages']);
 
         return false;
@@ -507,7 +505,7 @@ class Official extends RpcBase {
         } elseif ($res['data']['waitTime'] > 0) {
             Log::info("订单排队剩余时间:" . $res['data']['waitTime']);
         } elseif (empty($res['data']['orderId'])) {
-            Log::error($res['data']['msg']);
+            Log::warning($res['data']['msg']);
 
         } else {
             $orderId = $res['data']['orderId'];

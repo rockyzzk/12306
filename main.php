@@ -11,6 +11,7 @@ use \Core\Cache;
 use \Core\Log;
 use \Define\Consts;
 use \Utils\Captcha;
+use \Utils\Strategy;
 use \Rpc\Official;
 
 class Main
@@ -45,6 +46,12 @@ class Main
         if (empty($this->userConf['trip_dates'][0])) {
             Log::error('请先到conf/user.yaml中配置出行时间');
         }
+
+        // 车次为大写
+        foreach ($this->userConf['expect_trains'] as &$expectTrain) {
+            $expectTrain = strtoupper($expectTrain);
+        }
+        unset($expectTrain);
     }
 
     public function start() {
@@ -86,7 +93,8 @@ class Main
                 $trainsInfo = $this->proQueryTrain($tripDate);
 
                 // 更新查询次数
-                $queryTimes = Cache::get(Consts::CACHE_QUERY_TIMES['key']) + Consts::QUERY_TICKET_MULTI_COUNT;
+                $queryTicketMultiCount = Cache::get(Consts::CACHE_QUERY_TICKET_MULTI_COUNT['key']) ?? Strategy::QUERY_TICKET_MULTI_MAX;
+                $queryTimes = Cache::get(Consts::CACHE_QUERY_TIMES['key']) + $queryTicketMultiCount;
                 Cache::set(Consts::CACHE_QUERY_TIMES['key'], $queryTimes, Consts::CACHE_QUERY_TIMES['ttl']);
 
                 // 未查到合适的车次及余票
@@ -162,8 +170,11 @@ class Main
     protected function proQueryTrain($tripDate) {
 
         // 查询车次
-        $trains = $this->officialObj->multiQueryTrains($tripDate, $this->userConf['from_station'], $this->userConf['to_station'], Consts::QUERY_TICKET_MULTI_COUNT);
+        $multiCount = Cache::get(Consts::CACHE_QUERY_TICKET_MULTI_COUNT['key']) ?? Strategy::QUERY_TICKET_MULTI_MAX;
+        $trains = $this->officialObj->multiQueryTrains($tripDate, $this->userConf['from_station'], $this->userConf['to_station'], $multiCount);
+
         if (empty($trains)) {
+            Strategy::queryTicketMultiCount();
             return null;
         }
 
@@ -199,16 +210,20 @@ class Main
 
         // 获取排队人数
         if (isset($checkRes) && $checkRes) {
-            do {
-                $queueCount = $this->officialObj->getQueueCount($passengerInfo, $orderInfo);
-                sleep(1);
-            } while ($queueCount != 0);
+            $trainNo = $orderInfo['ticket_info']['queryLeftTicketRequestDTO']['station_train_code'];
 
-            // 查询出错，关小黑屋，防止错过正常票
-            if ($queueCount === false) {
-                $trainNo = $orderInfo['ticket_info']['queryLeftTicketRequestDTO']['station_train_code'];
-                Log::warning($trainNo . ' 车次关小黑屋，时间：' . (Consts::CACHE_BLACK_HOUSE['ttl'] / 60) . '分钟');
-                Cache::set(Consts::CACHE_BLACK_HOUSE['key'] . $trainNo, 1, Consts::CACHE_BLACK_HOUSE['ttl']);
+            if (!empty($trainNo)) {
+
+                do {
+                    $queueCount = $this->officialObj->getQueueCount($passengerInfo, $orderInfo);
+                    sleep(1);
+                } while ($queueCount != 0);
+
+                // 查询出错，关小黑屋，防止错过正常票
+                if ($queueCount === false) {
+                    Log::warning($trainNo . ' 车次关小黑屋，时间：' . (Consts::CACHE_BLACK_HOUSE['ttl'] / 60) . '分钟');
+                    Cache::set(Consts::CACHE_BLACK_HOUSE['key'] . $trainNo, 1, Consts::CACHE_BLACK_HOUSE['ttl']);
+                }
             }
         }
 
@@ -281,8 +296,9 @@ class Main
                 $seatTypes = Consts::SEAT_ALL;
             }
 
-            // 去除加入小黑屋的车次
-            if (Cache::get(Consts::CACHE_BLACK_HOUSE['key'] . $trainNo)) {
+            // 是否加入小黑屋
+            if (Cache::get(Consts::CACHE_BLACK_HOUSE['key'] . $trainNo) !== null) {
+                Log::info($trainNo . '加入了小黑屋');
                 continue;
             }
 

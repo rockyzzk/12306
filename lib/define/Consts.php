@@ -26,6 +26,14 @@ class Consts
         'key' => 'black_house_train_no:', // + 车次
         'ttl' => 60 * 5,
     ];
+    const CACHE_QUERY_TICKET_MULTI_COUNT = [
+        'key' => 'query_ticket_multi_count:',
+        'ttl' => 0,
+    ];
+    const CACHE_IP_LOCK_TIMES = [
+        'key' => 'ip_lock_times:',
+        'ttl' => 60 * 60,
+    ];
 
     const CAPTCHA_POSITION = [
         [41, 46],
@@ -72,22 +80,16 @@ class Consts
     ];
 
     // 等待订单重试次数
-    const ORDER_WAIT_RETRY_COUNT = 30;
+    const ORDER_WAIT_RETRY_COUNT = 10;
 
     // 查询余票时间间隔
     const QUERY_TICKET_SLEEP_SECOND = 0;
 
-    // 查询余票失败等待时间
-    const QUERY_TICKET_FAILED_SECOND = 10;
-
     // RPC请求失败等待时间
     const RPC_FAILED_SECOND = 60;
 
-    // 查询余票批量次数
-    const QUERY_TICKET_MULTI_COUNT = 10;
-
     // 查询余票提醒间隔
-    const QUERY_TICKET_NOTICE_COUNT = 10000;
+    const QUERY_TICKET_NOTICE_COUNT = 1000;
 
     // 可预定时间
     const AVAILABLE_START_TIME = '07:00';
