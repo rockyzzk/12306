@@ -31,6 +31,7 @@ composer install
 cp conf/user.yaml.example conf/user.yaml
 ```
 
+运行
 ```php
 php run.php
 ```
