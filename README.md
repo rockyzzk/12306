@@ -33,4 +33,6 @@ cp conf/user.yaml.example conf/user.yaml
 ```bash
 php run.php
 ```
+## 运行效果
 
+[image](https://github.com/rockyzzk/12306/blob/master/%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%E5%9B%BE.png)
