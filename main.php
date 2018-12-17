@@ -100,7 +100,7 @@ class Main
                 if (empty($trainsInfo)) {
 
                     // 每循环100次提醒
-                    if ($cycleTime % 20 === 0) {
+                    if ($cycleTime % 100 === 0) {
                         Log::info("未找到合适车次，已进行【 $queryTimes 】次查询");
                     }
 
