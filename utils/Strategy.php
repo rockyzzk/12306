@@ -34,7 +34,7 @@ class Strategy
         Cache::set(Consts::CACHE_QUERY_TICKET_MULTI_COUNT['key'], $multiCount, Consts::CACHE_QUERY_TICKET_MULTI_COUNT['ttl']);
         Cache::set(Consts::CACHE_IP_LOCK_TIMES['key'], $ipLockTimes, Consts::CACHE_IP_LOCK_TIMES['ttl']);
 
-        sleep($ipLockTimes * self::QUERY_TICKET_FAILED_SECOND);
         Log::info("设置批量查询次数：$multiCount ；等待秒数：".$ipLockTimes * self::QUERY_TICKET_FAILED_SECOND);
+        sleep($ipLockTimes * self::QUERY_TICKET_FAILED_SECOND);
     }
 }

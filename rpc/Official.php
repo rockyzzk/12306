@@ -99,7 +99,7 @@ class Official extends RpcBase {
 
         $captchaBody = $this->__send($urlKey);
 
-        if (mb_strpos($captchaBody, 'error') !== false) {
+        if (empty($captchaBody) || mb_strpos($captchaBody, 'error') !== false) {
             Log::warning('获取验证码失败，10秒后重试');
             return false;
         }

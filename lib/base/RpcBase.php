@@ -113,7 +113,7 @@ class RpcBase {
                 }
             }
 
-            Log::info("[RPC-REQUEST] [method]$method [url]$url [status]" . $res->getStatusCode() . ' [output]' . $logOutput, 'rpc');
+            Log::info("[RPC-RESPONSE] [method]$method [url]$url [status]" . $res->getStatusCode() . ' [output]' . $logOutput, 'rpc');
         } catch (\Throwable $e) {
             Log::warning("[RPC-REQUEST] [method]$method [url]$url [failed]" . $e->getMessage(), 'rpc');
             return null;
@@ -136,7 +136,7 @@ class RpcBase {
             'concurrency' => 5,
             'fulfilled' => function ($response, $index) use ($method, $url, &$resArr) {
                 $resArr[$index] = $response->getBody();
-                Log::info("[MULTI-RPC-REQUEST] [INDEX]$index [method]$method [url]$url [status]" . $response->getStatusCode() . ' [output]' . $response->getBody(), 'rpc');
+                Log::info("[MULTI-RPC-RESPONSE] [INDEX]$index [method]$method [url]$url [status]" . $response->getStatusCode() . ' [output]' . $response->getBody(), 'rpc');
             },
             'rejected' => function ($reason, $index) use ($method, $url) {
                 Log::warning("[MULTI-RPC-REQUEST] [INDEX]$index [method]$method [url]$url [failed]$reason", 'rpc');
