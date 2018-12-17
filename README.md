@@ -14,7 +14,7 @@ Rocky12306
 
 以下二选一
 
-- 注册百度云应用（人工智能-图像识别）
+- 注册百度云 [人工智能-图像识别-创建应用](https://console.bce.baidu.com/ai#/ai/imagesearch/overview/index)（需包含"文字识别、图像识别"接口）
 - Tesseract OCR
 
 ## 安装
