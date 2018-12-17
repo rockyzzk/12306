@@ -21,7 +21,7 @@ class Strategy
     const QUERY_TICKET_MULTI_MAX = 100;
 
     // 查询余票失败等待时间
-    const QUERY_TICKET_FAILED_SECOND = 10;
+    const QUERY_TICKET_FAILED_SECOND = 100;
 
     public static function queryTicketMultiCount() {
         $ipLockTimes = Cache::get(Consts::CACHE_IP_LOCK_TIMES['key']) ?? 0;
