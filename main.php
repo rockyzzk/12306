@@ -298,7 +298,6 @@ class Main
 
             // 是否加入小黑屋
             if (Cache::get(Consts::CACHE_BLACK_HOUSE['key'] . $trainNo) !== null) {
-                Log::info($trainNo . '加入了小黑屋');
                 continue;
             }
 
