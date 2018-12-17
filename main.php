@@ -93,14 +93,14 @@ class Main
 
                 // 更新查询次数
                 $queryTicketMultiCount = Cache::get(Consts::CACHE_QUERY_TICKET_MULTI_COUNT['key']) ?? Strategy::QUERY_TICKET_MULTI_MAX;
-                $queryTimes = Cache::get(Consts::CACHE_QUERY_TIMES['key']) ?? 0 + $queryTicketMultiCount;
+                $queryTimes = $queryTicketMultiCount + Cache::get(Consts::CACHE_QUERY_TIMES['key']) ?? 0;
                 Cache::set(Consts::CACHE_QUERY_TIMES['key'], $queryTimes, Consts::CACHE_QUERY_TIMES['ttl']);
 
                 // 未查到合适的车次及余票
                 if (empty($trainsInfo)) {
 
                     // 每循环100次提醒
-                    if ($cycleTime % 100 === 0) {
+                    if ($cycleTime % 20 === 0) {
                         Log::info("未找到合适车次，已进行【 $queryTimes 】次查询");
                     }
 

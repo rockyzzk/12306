@@ -15,14 +15,16 @@
   # 出发日期（可多选）
   trip_dates:
   - "2018-12-14"
+  - "2018-12-15"
 
   # 期望车次（可多选）：
   expect_trains:
   - "Z107"
 
-  # 坐席类型（可多选）：
+  # 坐席类型（"商务座、一等座、二等座、特等座、软卧、硬卧、硬座、无座" 可多选）：
   seat_types:
   - "硬座"
+  - "硬卧"
 
   # 乘车人姓名（可多选）：
   passengers:
@@ -34,7 +36,7 @@
 # 自动识别验证码
 is_auto_captcha: 0
 
-# 百度云帐号
+# 百度云应用（用于自动识别验证码，前往 https://console.bce.baidu.com/ai#/ai/imagesearch/overview/index，创建应用，需包含"文字识别、图像识别"接口）
 baiduai_conf:
   app_id: ""
   api_key: ""
