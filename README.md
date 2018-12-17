@@ -20,19 +20,17 @@ Rocky12306
 ## 安装
 
 通过[Composer](http://getcomposer.org)安装依赖.
-
 ```bash
 composer install
 ```
 
 创建配置文件
-
 ```bash
 cp conf/user.yaml.example conf/user.yaml
 ```
 
 运行
-```php
+```bash
 php run.php
 ```
 
