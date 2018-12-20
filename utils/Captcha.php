@@ -165,8 +165,8 @@ class Captcha
                 if (!in_array($imgKey, $captchaKeyArr)) {
                     $captchaKeyArr[] = $imgKey;
 
-                    // 单关键字验证码，匹配的图片数量为1～2个
-                    if (count($captchaKeyArr) === 2) {
+                    // 单关键字验证码，匹配的图片数量最多为3个
+                    if (count($captchaKeyArr) === 3) {
                         break;
                     }
                 }
