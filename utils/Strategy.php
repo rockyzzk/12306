@@ -18,7 +18,7 @@ class Strategy
     const QUERY_TICKET_MULTI_MIN = 1;
 
     // 查询余票批量次数最大值
-    const QUERY_TICKET_MULTI_MAX = 20;
+    const QUERY_TICKET_MULTI_MAX = 4;
 
     // 查询余票失败等待时间
     const QUERY_TICKET_FAILED_SECOND = 50;

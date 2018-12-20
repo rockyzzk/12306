@@ -120,7 +120,6 @@ class Main
                 }
             }
 
-            sleep(Consts::QUERY_TICKET_SLEEP_SECOND);
             $cycleTime ++;
         } while (true);
 
@@ -168,6 +167,9 @@ class Main
     }
 
     protected function proQueryTrain($tripDate) {
+
+        // 查询余票间隔时间：ip被封次数
+        sleep(Cache::get(Consts::CACHE_IP_LOCK_TIMES['key']) ?? 0);
 
         // 查询车次
         $multiCount = Cache::get(Consts::CACHE_QUERY_TICKET_MULTI_COUNT['key']) ?? Strategy::QUERY_TICKET_MULTI_MAX;

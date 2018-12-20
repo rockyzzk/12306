@@ -86,9 +86,6 @@ class Consts
     // 等待订单重试次数
     const ORDER_WAIT_RETRY_COUNT = 10;
 
-    // 查询余票时间间隔
-    const QUERY_TICKET_SLEEP_SECOND = 0;
-
     // RPC请求失败等待时间
     const RPC_FAILED_SECOND = 60;
 
