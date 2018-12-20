@@ -100,7 +100,7 @@ class Official extends RpcBase {
         $captchaBody = $this->__send($urlKey);
 
         if (empty($captchaBody) || mb_strpos($captchaBody, 'error') !== false) {
-            Log::warning('获取验证码失败，10秒后重试');
+            Log::warning('获取验证码失败，5秒后重试');
             return false;
         }
 
@@ -221,7 +221,10 @@ class Official extends RpcBase {
     }
 
     public function queryTrains($date, $from, $to) {
-        $allStationArr = $this->getAllStations();
+        if (($allStationArr = Cache::get(Consts::CACHE_ALL_STATIONS['key'])) === null) {
+            $allStationArr = $this->getAllStations();
+            Cache::set(Consts::CACHE_ALL_STATIONS['key'], $allStationArr, Consts::CACHE_ALL_STATIONS['ttl']);
+        }
 
         $urlKey = 'query_trains';
         $params = [
@@ -244,7 +247,10 @@ class Official extends RpcBase {
     }
 
     public function multiQueryTrains($date, $from, $to, $multiCount) {
-        $allStationArr = $this->getAllStations();
+        if (($allStationArr = Cache::get(Consts::CACHE_ALL_STATIONS['key'])) === null) {
+            $allStationArr = $this->getAllStations();
+            Cache::set(Consts::CACHE_ALL_STATIONS['key'], $allStationArr, Consts::CACHE_ALL_STATIONS['ttl']);
+        }
 
         $urlKey = 'query_trains';
         $params = [

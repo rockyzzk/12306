@@ -20,12 +20,17 @@ class RpcBase {
 
     private function _getHttp($forceUpdate = false) {
         if (is_null($this->httpClient) || $forceUpdate) {
-            $this->httpClient = new Client(['cookies' => true]);
+            $this->httpClient = new Client([
+                'cookies' => true,
+                'timeout' => $this->timeout,
+            ]);
         }
         return $this->httpClient;
     }
 
     protected $host;
+
+    protected $timeout = 10;
 
     protected $logExceptRequestKeywords = [];
 
@@ -101,6 +106,7 @@ class RpcBase {
             }
 
             Log::info("[RPC-REQUEST] [method]$method [url]$url [input]" . $logInput, 'rpc');
+
             $res = $client->request($method, $url, $options);
             $logOutput = $res->getBody();
 
@@ -133,7 +139,7 @@ class RpcBase {
         };
 
         $pool = new Pool($client, $requests($multiCount), [
-            'concurrency' => 5,
+            'concurrency' => 10,
             'fulfilled' => function ($response, $index) use ($method, $url, &$resArr) {
                 $resArr[$index] = $response->getBody();
                 Log::info("[MULTI-RPC-RESPONSE] [INDEX]$index [method]$method [url]$url [status]" . $response->getStatusCode() . ' [output]' . $response->getBody(), 'rpc');
