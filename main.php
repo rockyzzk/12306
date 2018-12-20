@@ -148,8 +148,8 @@ class Main
             // 获取验证码
             $getRes = $this->officialObj->getCaptcha('login');
             if (!$getRes) {
-                // 验证码请求限制，10秒后重试
-                sleep(10);
+                // 验证码请求限制，5秒后重试
+                sleep(5);
                 continue;
             }
 
@@ -265,7 +265,9 @@ class Main
         $passengers = $this->userConf['passengers'];
         $fromName = $this->userConf['from_station'];
         $toName = $this->userConf['to_station'];
+        $tripDates = $this->userConf['trip_dates'];
         $trainArr = [];
+        $isHaveTrain = false;
 
         // 格式化车次
         foreach ($trains as $trainInfo) {
@@ -279,6 +281,7 @@ class Main
                 if (!in_array($trainNo, $expectTrains)) {
                     continue;
                 }
+                $isHaveTrain = true;
             }
 
             // 期望的列车类型
@@ -352,6 +355,14 @@ class Main
                 unset($train);
             }
         }
+
+        // 该抢票车次是否存在
+        if (!$isHaveTrain) {
+            $tripDates = implode(',', $tripDates);
+            $expectTrains = implode(',', $expectTrains);
+            Log::warning("$tripDates 由 $fromName 开往 $toName 的 $expectTrains 车次不存在");
+        }
+
         return $trainArr;
     }
 
