@@ -14,6 +14,10 @@ class Consts
         'key' => 'is_login',
         'ttl' => 60 * 2,
     ];
+    const CACHE_ALL_STATIONS = [
+        'key' => 'all_stations',
+        'ttl' => 0,
+    ];
     const CACHE_PASSENGER = [
         'key' => 'passenger_info',
         'ttl' => 0,
