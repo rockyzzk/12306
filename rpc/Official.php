@@ -183,7 +183,7 @@ class Official extends RpcBase {
 
     public function checkLogin() {
 
-        if (!Cache::get(Consts::CACHE_LOGIN['key'])) {
+        if (Cache::get(Consts::CACHE_LOGIN['key']) === null) {
             $urlKey = 'check_user';
             $params = [
                 '_json_att' => ''

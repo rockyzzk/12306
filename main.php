@@ -43,8 +43,8 @@ class Main
             Log::error('请先到conf/user.yaml中配置乘车人姓名');
         }
 
-        if (empty($this->userConf['trip_dates'][0])) {
-            Log::error('请先到conf/user.yaml中配置出行时间');
+        if (empty($this->userConf['trip_dates'][0]) || strtotime($this->userConf['trip_dates'][0]) < strtotime(date('Y-m-d', time()))) {
+            Log::error('请先到conf/user.yaml中配置正确的出行时间');
         }
 
         // 车次为大写

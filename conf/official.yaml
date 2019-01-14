@@ -49,7 +49,7 @@ urls:
 
   #查询车次及余票
   query_trains:
-    path: /otn/leftTicket/query
+    path: /otn/leftTicket/queryZ
     method: get
     referer: https://kyfw.12306.cn/otn/leftTicket/init
 
